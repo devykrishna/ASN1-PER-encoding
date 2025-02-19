@@ -1,0 +1,3 @@
+Der Compiler wird mit "compiler.bat <asn1file | verzeichnis | zip-file>" gestartet. Im Falle einer Zip-Datei oder eines Verzeichnises, werden alle darin enthaltenen Dateien mit der Endung ".asn" versucht zu compilieren. Natürlich kann dem Compiler auch mehr als ein Parameter übergeben werden. 
+
+Das Ausgabeverzeichnis sowie der Packagename der erzeugten Klassen kann in der Datei "config/GlobalConfig.xml" geändert werden.

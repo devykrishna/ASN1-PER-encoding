@@ -1,0 +1,1 @@
+java -cp %Classpath%;libs\openasn1-codec-new.jar;libs\commons\commons-io-1.2.jar;libs\freemarker\freemarker.jar;libs\javacc\javacc.jar;libs\log4j\log4j-1.2.13.jar;openasn1-compiler-new.jar org.openasn1.compiler.ASN1Compiler %1 %2 %3 %4 %5 %6 %7 %8 %9

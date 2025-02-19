@@ -1,0 +1,14 @@
+org.openasn1.codec.coder
+org.openasn1.codec.coder.exceptions
+org.openasn1.codec.coder.per
+org.openasn1.codec.coder.typecoder
+org.openasn1.codec.constraints
+org.openasn1.codec.constraints.character
+org.openasn1.codec.constraints.exceptions
+org.openasn1.codec.constraints.subtype
+org.openasn1.codec.constraints.visitor
+org.openasn1.codec.manager
+org.openasn1.codec.util
+org.openasn1.codec.util.bit
+org.openasn1.codec.util.converter
+org.openasn1.codec.util.debug

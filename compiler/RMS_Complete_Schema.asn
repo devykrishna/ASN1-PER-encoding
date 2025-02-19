@@ -1,0 +1,614 @@
+Telematics DEFINITIONS AUTOMATIC TAGS ::= BEGIN
+Telematics ::= SEQUENCE{ 
+        header Header,
+        body Body
+    }
+Header ::= SET {
+        requestid   IdString,
+        ackRequired BOOLEAN OPTIONAL,
+        imei        PrintableString,
+        imsi        PrintableString,
+        msisdn      PrintableString,
+        vin         PrintableString,
+        timeStamp   TimeStamp
+    }
+    
+Body ::= SET {
+        basic           Basic           OPTIONAL,
+        maintenance     Maintenance     OPTIONAL,
+        running         Running         OPTIONAL,
+        drivingSafety   DrivingSafety   OPTIONAL,
+        drivingBehavior DrivingBehavior OPTIONAL,
+        diagnostics     Diagnostics     OPTIONAL,
+        event           Event           OPTIONAL
+    }
+Basic ::= SEQUENCE {
+        		position Position,
+        		speed REAL,
+        		direction INTEGER(0..360) OPTIONAL,
+        		mils  SET OF MilElement,
+        		fuel REAL,
+        		engineStatus EngineStatus ,
+        		keyStatus KeyStatus,
+        		distanceToEmpty INTEGER OPTIONAL,
+        		odometer INTEGER,
+                timeStamp TimeStamp,
+        		usageMode UsageMode OPTIONAL,
+        		engineBlockedStatus EngineBlockedStatus OPTIONAL
+    }
+
+    EngineStatus ::= ENUMERATED {
+        on (0),
+        off (1),
+        unknown (2)
+    }
+
+    KeyStatus ::= ENUMERATED {
+         notInserted (0),
+         inserted (1),
+         unknown (2)
+    }
+
+    EngineBlockedStatus ::= ENUMERATED {
+         allowedToStart (0),
+         forbiddenToStart (1)
+    }
+
+    UsageMode ::= ENUMERATED {
+         odometerFromVehicle (0),
+         odometerFromOBD (1)
+    }
+
+
+    MilElement ::= SET {
+       mil  MilCode,
+       status MilStatus
+    }
+
+    MilCode ::= ENUMERATED {
+        washerFluid (0),
+        oilPressure (1),
+        battery (2),
+        temperature(3),
+        airbag (4),
+        brakeSystem (5),
+        tyrePressure (6),
+        fuelLevel (7),
+        engine (8),
+        brakeWear (9)
+    }
+
+    MilStatus ::= ENUMERATED {
+         warning (0),
+         highRisk (1)
+    }
+
+Maintenance ::=SET{
+        mainBatteryStatus                     BatteryStatus,
+        tyreStatusDriver                      REAL ,
+        tyreStatusPassenger                   REAL ,
+        tyreStatusDriverRear                  REAL ,
+        tyreStatusPassengerRear               REAL ,
+        tyrePreWarningDriver                  WarningLevel OPTIONAL,
+        tyrePreWarningPassenger               WarningLevel OPTIONAL,
+        tyrePreWarningDriverRear              WarningLevel OPTIONAL,
+        tyrePreWarningPassengerRear           WarningLevel OPTIONAL,
+        engineHrsToService                    REAL,
+        distanceToService                     REAL,
+        daysToService                         REAL,
+        serviceWarningStatus                  WarningStatus OPTIONAL,
+        serviceWarningTrigger                 ServiceWarningTrigger OPTIONAL,
+        brakeFluidLevelStatus                 BrakeFluidLevelStatus OPTIONAL,
+        washerFluidLevelStatus                WasherFluidLevelStatus OPTIONAL,
+        timeStamp                             TimeStamp
+    }
+    
+    WarningLevel ::=ENUMERATED {
+        normal    ,
+        preWarning,
+        warning   
+    }
+    
+    WarningStatus ::=ENUMERATED{
+        normal    ,
+        almostTime,
+        time      ,
+        timePassed,
+        unknown   
+    }
+    
+    ServiceWarningTrigger ::=ENUMERATED{
+        enabled ,
+        disabled
+    }
+    
+    BrakeFluidLevelStatus ::=ENUMERATED{
+        normal,
+        high  ,
+        low   
+    }
+    
+    
+    WasherFluidLevelStatus ::=ENUMERATED{
+        normal,
+        low   
+    }
+    
+    BatteryStatus ::=SET{
+        stateOfCharge       StateOfCharge,
+        chargeLevel         ChargeLevel,
+        stateOfHealth       StateOfHealth,
+        voltage             REAL
+    }
+    
+    StateOfCharge ::=ENUMERATED{
+        normal    ,
+        alternated
+    }
+    
+    ChargeLevel ::=ENUMERATED{
+        full          ,
+        almostFull    ,
+        halfCharged   ,
+        almostEmpty   ,
+        virtuallyEmpty,
+        empty         
+    }
+    
+    StateOfHealth ::=ENUMERATED{
+        normal  ,
+        replaced,
+        unknown 
+    }	
+
+Running ::=SET{
+        engineOilLevelStatus                            EngineOilLevelStatus OPTIONAL,
+        engineOilTemperature                            REAL OPTIONAL,
+        engineOilPressureWarning                        EngineOilPressureWarning OPTIONAL,
+        engineCoolantTemperature                        REAL OPTIONAL,
+        engineCoolantLevelStatus                        EngineCoolantLevelStatus OPTIONAL,
+        fuelLevel                                       REAL,
+        fuelLevelStatus                                 FuelLevelStatus,
+        aveFuelConsumption                              REAL OPTIONAL,
+        aveFuelConsumptionInLatestDrivingCycle          REAL OPTIONAL,
+        avgRunningSpeed                                 REAL OPTIONAL,
+        bulbStatus                                      BulbStatus OPTIONAL,
+        timeStamp                                       TimeStamp
+    }
+    
+    EngineOilLevelStatus ::=ENUMERATED{
+        normal ,
+        low    ,
+        veryLow,
+        high   
+    }
+    
+    EngineOilPressureWarning ::=ENUMERATED{
+        normal ,
+        warning
+    }
+    
+    EngineCoolantLevelStatus ::=ENUMERATED{
+        high,
+        low 
+    }
+    
+    FuelLevelStatus ::=ENUMERATED{
+        normal,
+        low   
+    }
+    
+    BulbStatus ::=ENUMERATED{
+        normal  ,
+        abnormal
+    }
+	
+DrivingSafety ::= SEQUENCE{
+		srsStatus                                 SrsStatus OPTIONAL,
+		doorOpenStatusDriver                      DoorStatus OPTIONAL,
+		doorOpenStatusPassenger                   DoorStatus OPTIONAL,
+		doorOpenStatusDriverRear                  DoorStatus OPTIONAL,
+		doorOpenStatusPassengerRear               DoorStatus OPTIONAL,
+		doorLockStatusDriver                      DoorLockedStatus OPTIONAL,
+		doorLockStatusPassenger                   DoorLockedStatus OPTIONAL,
+		doorLockStatusDriverRear                  DoorLockedStatus OPTIONAL,
+		doorLockStatusPassengerRear               DoorLockedStatus OPTIONAL,
+		seatBeltStatusDriver                      BOOLEAN OPTIONAL,
+        seatBeltStatusPassenger                   BOOLEAN OPTIONAL,
+        seatBeltStatusDriverRear                  BOOLEAN OPTIONAL,
+        seatBeltStatusPassengerRear               BOOLEAN OPTIONAL,
+        handBrakeStatus                           HandBrakeStatus OPTIONAL,
+        electricParkBrakeStatus                   ElectricParkBrakeStatus OPTIONAL,
+        timeStamp                                 TimeStamp OPTIONAL,
+		trunkOpenStatus                           TrunkStatus OPTIONAL,
+		engineHoodOpenStatus                      EngineHoodStatus OPTIONAL,
+		centralLockingStatus                      CentralLockingStatus OPTIONAL
+	}
+
+	SrsStatus ::= ENUMERATED {
+       airBagDeployed (0),
+       airBagNotDeployed (1),
+       unknown (2)
+    }
+
+    DoorStatus ::= ENUMERATED {
+      closed (0),
+      open (1),
+      unknown (2)
+    }
+
+    DoorLockedStatus ::= ENUMERATED {
+       unlocked (0),
+       locked (1),
+       properLocked (2),
+       unknown (3),
+       abnormal (4)
+    }
+
+     TrunkStatus ::= ENUMERATED {
+          closed (0),
+          open (1),
+          unknown (2)
+     }
+
+     EngineHoodStatus ::= ENUMERATED {
+          closed (0),
+          open (1),
+          unknown (2)
+     }
+
+     CentralLockingStatus ::= ENUMERATED {
+          locked (0),
+          unlocked (1)
+     }
+
+     HandBrakeStatus ::= ENUMERATED {
+           released (0),
+           closed (1),
+           inProgress (2)
+     }
+
+     ElectricParkBrakeStatus ::= ENUMERATED {
+           released (0),
+           closed (1),
+           inProgress (2)
+     }
+
+DrivingBehavior ::= SEQUENCE{
+        behaviours                            Behaviours,
+        timeStamp                             TimeStamp,
+        brakePedalDepressed                   BOOLEAN OPTIONAL,
+        engineSpeed                           REAL OPTIONAL,
+        transimissionGearPostion              TransimissionGearPostion OPTIONAL,
+        cruiseControlStatus                   CruiseControlStatus OPTIONAL
+    }
+
+    Behaviours ::= SET {
+       excessSpeeding BehaviourAdvancedKeyFactor OPTIONAL ,
+       accelerating   BehaviourUltimateKeyFactor OPTIONAL,
+       braking       BehaviourUltimateKeyFactor OPTIONAL,
+       cornering     BehaviourUltimateKeyFactor OPTIONAL,
+       harshRPM      BehaviourAdvancedKeyFactor OPTIONAL,
+       harshLaneChanging  BehaviourUltimateKeyFactor OPTIONAL,
+       fatiguedDriving  BehaviourBasicKeyFactor OPTIONAL,
+       laneDeparture  BehaviourUltimateKeyFactor OPTIONAL,
+       overSafeHeadway BehaviourUltimateKeyFactor OPTIONAL,
+       pedestrianCollision BehaviourUltimateKeyFactor OPTIONAL,
+       forwardCollision BehaviourUltimateKeyFactor OPTIONAL,
+       overRevving  BehaviourAdvancedKeyFactor OPTIONAL,
+       speedbreakerBump BehaviourBasicKeyFactor OPTIONAL,
+       engineOnWithoutDriver EngineOnWithoutDriver OPTIONAL,
+       harshOvertaking HarshOvertaking OPTIONAL
+    }
+
+    BehaviourBasicKeyFactor ::= SEQUENCE {
+       durationOverThreshold REAL,
+       dfbSpeed REAL
+    }
+
+    BehaviourAdvancedKeyFactor ::= SEQUENCE {
+       peakValue  REAL,
+       threshold  REAL,
+       durationOverThreshold REAL
+    }
+
+    BehaviourUltimateKeyFactor ::= SEQUENCE {
+       peakValue  REAL,
+       threshold  REAL,
+       durationOverThreshold REAL,
+       dfbSpeed REAL
+    }
+
+    TransimissionGearPostion ::= ENUMERATED {
+         notDisplayed (0),
+         pPosition (1),
+         rPosition (2),
+         nPosition (3),
+         dPosition (4),
+         m1Position (5),
+         m2Position (6),
+         m3Position (7),
+         m4Position (8),
+         m5Position (9),
+         m6Position (10),
+         m7Position (11),
+         m1PlusPosition (12),
+         m2PlusPosition (13),
+         m3PlusPosition (14),
+         m4PlusPosition (15),
+         m5PlusPosition (16),
+         m6PlusPosition (17),
+         m2MinusPosition (18),
+         m3MinusPosition (19),
+         m4MinusPosition (20),
+         m5MinusPosition (21),
+         m6MinusPosition (22),
+         m7MinusPosition (23)
+    }
+
+    CruiseControlStatus ::= ENUMERATED {
+        cruiseControlEnabled (0),
+        cruiseControlDisabled (1)
+    }
+
+    EngineOnWithoutDriver ::= SEQUENCE {
+       peakValue  REAL OPTIONAL,
+       threshold  REAL OPTIONAL,
+       leaveStartTime TimeStamp OPTIONAL,
+       position Position OPTIONAL 
+    }
+
+    HarshOvertaking ::= SEQUENCE {
+       distancefromOvertookVehicle REAL OPTIONAL,
+       acceleratingDuration  REAL OPTIONAL,
+       dfbSpeed REAL OPTIONAL,
+       points SEQUENCE OF PositionNSpeed OPTIONAL
+    }
+
+    PositionNSpeed ::= SEQUENCE {
+        latitude       REAL,
+        longitude      REAL,
+        altitude       REAL,
+        heading        REAL,
+        fix            INTEGER(0..64) OPTIONAL,
+        speed          REAL
+    }
+	
+Diagnostics ::= SEQUENCE {
+	   ecuDiagnositcs ECUDiagnostic,
+	   timeStamp  TimeStamp
+	}
+
+    ECUDiagnostic ::= SEQUENCE {
+       ecuID            PrintableString,
+       exceptionCode    INTEGER OPTIONAL,
+       dtcs             SET OF DiagnosticTroubleCode,
+       diagnosticResult HealthStatus OPTIONAL
+    }
+
+    HealthStatus ::= ENUMERATED {
+      ok           (0),
+      faulty       (1),
+      unknown      (2),
+      invalid      (3)
+    }
+
+	DiagnosticTroubleCode ::= SET {
+	     dtc           PrintableString OPTIONAL,
+	     dtcAdvice     PrintableString OPTIONAL,
+	     dtcDesc       PrintableString OPTIONAL,
+	     firstFail     TimeStamp OPTIONAL,  -- define a common timestamp format
+	     lastFail      TimeStamp OPTIONAL,
+	     status        DtcStatus OPTIONAL,
+	     odometer      INTEGER OPTIONAL,
+	     odoStatus     OdoStatus OPTIONAL,
+	     failureBatteryVoltage  REAL OPTIONAL,
+	     failureVehicleSpeed  REAL OPTIONAL,
+	     position       Position OPTIONAL
+	}
+
+	 DtcStatus ::= ENUMERATED {
+         testFailed (0),
+         testFailedThisOperationCycle (1),
+         pendingDTC (2),
+         confirmedDTC (3),
+         testNotCompletedSinceLastClear (4),
+         testFailedSinceLastClear (5),
+         testNotCompletedThisOperationCycle (6),
+         warningIndicatorRequested (7)
+     }
+
+      OdoStatus ::= ENUMERATED {
+          tbox (0),
+          obd (1)
+      }
+
+Event ::= SET{
+        eventPayload          EventPayload,
+        type                  PrintableString OPTIONAL,
+        id                    IdString,
+        name                  PrintableString OPTIONAL,
+        description           PrintableString OPTIONAL,
+        timestamp             TimeStamp
+    }
+    
+    EventPayload ::=CHOICE{
+        accident                            Accident,
+        theft                               Theft,
+        driverLogin                         DriverStatus,
+        driverLogout                        DriverStatus,
+        driverAlarmTrigger                  AlarmTrigger,
+        passengerAlarmTrigger               AlarmTrigger,
+        irregularDriving                    IrregularDriving,
+        passengerOn                         PassengerOn,
+        passengerOff                        PassengerOff,
+        irregularHWAccessed                 IrregularHWAccessed,
+        tripStart                           TripStart,
+        tripEnd                             TripEnd
+    }
+
+    Accident ::= SET {
+        position Position,
+        speed    REAL,
+        odometer REAL
+    }
+    
+    Theft ::= SET {
+        position Position,
+        odometer REAL
+    }
+    
+    DriverStatus ::= SET {
+        position Position,
+        driverId PrintableString,
+        driverName PrintableString OPTIONAL
+    }
+        
+    AlarmTrigger ::= SET {
+        position   Position,
+        driverId   PrintableString,
+        driverName PrintableString   OPTIONAL,
+        speed      REAL,
+        odometer   REAL
+    }
+    
+    IrregularDriving ::= SET {
+        position   Position,
+        driverId   PrintableString,
+        driverName PrintableString   OPTIONAL,
+        speed      REAL,
+        odometer   REAL,
+        statusCode INTEGER
+    }
+    
+    PassengerOn ::= SET {
+        position         Position,
+        passengerCount   INTEGER,
+        passengerStatus  PrintableString OPTIONAL,
+        driverIdNum      PrintableString OPTIONAL,
+        driverLicenseNum PrintableString OPTIONAL,
+        driverPhoneNum   PrintableString OPTIONAL,
+        companyName      PrintableString OPTIONAL,
+        customerPhoneNum PrintableString OPTIONAL,
+        customerName     PrintableString OPTIONAL
+    }
+    
+    PassengerOff ::= SET {
+        position         Position,
+        passengerCount   INTEGER,
+        passengerStatus  PrintableString OPTIONAL,
+        driverIdNum      PrintableString OPTIONAL,
+        driverLicenseNum PrintableString OPTIONAL,
+        driverPhoneNum   PrintableString OPTIONAL,
+        companyName      PrintableString OPTIONAL,
+        customerPhoneNum PrintableString OPTIONAL,
+        customerName     PrintableString OPTIONAL
+    }
+    
+    IrregularHWAccessed ::= SET {
+        deviceId PrintableString,
+        position Position,
+        reason   PrintableString OPTIONAL
+    }
+
+    TripStart ::= SET {
+        type              Type,
+        startTime         PrintableString,
+        startPosition     Position,
+        odometer          INTEGER,
+        customer          Customer        OPTIONAL,
+        enterpriseName    PrintableString OPTIONAL,
+        driver            SET OF Driver   OPTIONAL
+    }
+    
+    Type ::= ENUMERATED {
+        journey,
+        trip
+    }
+
+    Reason ::= SET {
+        code                     PrintableString,
+        status                   PrintableString,
+        description              PrintableString
+    }
+    
+    TripEnd ::= SET {
+        type                                 Type,
+        startTime                            PrintableString,
+        startPosition                        Position,
+        endTime                              PrintableString,
+        endPosition                          Position,
+        distance                             INTEGER,
+        tripTime                             INTEGER,
+        fare                                 Fare               OPTIONAL,
+        salikPasses                          SET OF SalikPasses OPTIONAL,
+        paymentType                          PrintableString    OPTIONAL,
+        maxSpeed                             INTEGER            OPTIONAL,
+        averageSpeed                         INTEGER            OPTIONAL,
+        averageFuelConsumption               REAL               OPTIONAL,
+        fuelConsumption                      REAL,
+        co2                                  INTEGER OPTIONAL,
+        idleTime                             INTEGER,
+        odometer                             INTEGER,
+        customer                             Customer           OPTIONAL,
+        enterpriseName                       PrintableString    OPTIONAL,
+        driver                               SET OF Driver      OPTIONAL
+    }
+    
+    Fare ::= SET {
+        amount             REAL,
+        startFare          REAL,
+        distanceCharge     REAL,
+        timeCharge         REAL,
+        tollways           REAL,
+        extras             REAL,
+        tax                REAL,
+        tips               REAL,
+        rate               REAL,
+        unit               PrintableString
+    }
+
+    SalikPasses ::= SET {
+        salikId         PrintableString,
+        coordinate      SET OF REAL,
+        passTime        PrintableString
+    }
+    
+    Customer ::= SET {
+        passengers             SET OF Passengers OPTIONAL,
+        passengerCount         INTEGER,
+        passengerStatus        PrintableString   OPTIONAL
+    }
+    
+    Passengers ::= SET {
+        customerPhoneNum         PrintableString,
+        customerName             PrintableString,
+        contact                  Contact
+    }
+
+    Contact ::= ENUMERATED{
+        notContact,
+        contact
+    }
+    
+    Driver ::= SET {
+        displayName         PrintableString,
+        idCardNo            PrintableString,
+        gender              PrintableString,
+        driverId            PrintableString,
+        driverLicenseNum    PrintableString
+    }
+
+Position ::= SEQUENCE {
+	    latitude       REAL,
+        longitude      REAL,
+        altitude       REAL,
+        heading        REAL,
+        fix            INTEGER(0..64) OPTIONAL
+	}
+
+TimeStamp ::= INTEGER(0..9999999999999)
+
+IdString ::= VisibleString (FROM ("A".."Z"|"a".."z"|" "|"_"|"-"|"0".."9"))
+
+END
